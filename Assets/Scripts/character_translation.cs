@@ -40,7 +40,20 @@ public class character_translation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GetInput();
+        CheckCrouch();
+
+        if(characterController.isGrounded)
+        {
+            GroundMovement();
+        }   
+        else  
+        {
+            NotGroundMovement();
+        } 
+
+        characterController.Move(moveDirection * Time.deltaTime);
+            
     }
 
     private void GetInput()
@@ -93,7 +106,20 @@ public class character_translation : MonoBehaviour
         {
             moveDirection.y = jumpSpeed;
         }
-
-        
     }
+
+    private void NotGroundMovement()
+    {
+        if(isWalking || isCrouching)
+        {
+            speed = walkSpeed;
+        }
+        else 
+        {
+            speed = defaultSpeed;
+        }
+        moveDirection = (transform.right *horizontalMovement *speed)+ 
+            new Vector3(0f,moveDirection.y -gravity * Time.deltaTime, 0f)  + 
+            (transform.forward *verticalMovement * speed);
+    }               
 }
